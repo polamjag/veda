@@ -33,6 +33,7 @@
     "sinon": "^2.3.8"
   },
   "scripts": {
+    "test": "atom --test --timeout 10 spec",
     "lint": "eslint lib"
   }
 }
