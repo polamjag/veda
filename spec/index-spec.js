@@ -1,5 +1,7 @@
 'use babel';
 /* eslint-env jasmine, atomtest */
+import sinon from 'sinon';
+import GlslLivecoder from '../lib/glsl-livecoder';
 
 describe('GlslLivecoder', () => {
   let workspaceElement;
@@ -29,6 +31,43 @@ describe('GlslLivecoder', () => {
         atom.commands.dispatch(workspaceElement, 'glsl-livecoder:toggle');
         expect(document.body.classList.contains('glsl-livecoder-enabled')).toBe(false);
       });
+    });
+  });
+
+  describe('commands', () => {
+    let stub;
+
+    beforeEach(() => {
+      atom.commands.dispatch(workspaceElement, 'glsl-livecoder:toggle');
+      waitsForPromise(() => activationPromise);
+    });
+
+    afterEach(() => {
+      stub.restore();
+    });
+
+    it('calls GlslLivecoder.prototype.loadShader', () => {
+      stub = sinon.stub(GlslLivecoder.prototype, 'loadShader');
+      atom.commands.dispatch(workspaceElement, 'glsl-livecoder:load-shader');
+      expect(stub.calledOnce).toBe(true);
+    });
+
+    it('calls GlslLivecoder.prototype.watchShader', () => {
+      stub = sinon.stub(GlslLivecoder.prototype, 'watchShader');
+      atom.commands.dispatch(workspaceElement, 'glsl-livecoder:watch-shader');
+      expect(stub.calledOnce).toBe(true);
+    });
+
+    it('calls GlslLivecoder.prototype.watchActiveShader', () => {
+      stub = sinon.stub(GlslLivecoder.prototype, 'watchActiveShader');
+      atom.commands.dispatch(workspaceElement, 'glsl-livecoder:watch-active-shader');
+      expect(stub.calledOnce).toBe(true);
+    });
+
+    it('calls GlslLivecoder.prototype.stopWatching', () => {
+      stub = sinon.stub(GlslLivecoder.prototype, 'stopWatching');
+      atom.commands.dispatch(workspaceElement, 'glsl-livecoder:stop-watching');
+      expect(stub.calledOnce).toBe(true);
     });
   });
 });
